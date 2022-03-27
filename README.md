@@ -10,4 +10,4 @@ Visit <a>http://webmd.rf.gd</a> Official Website for WebMD Framework.
 <section>
     <h1><strong>Usage:</strong><h1/>
     <h3>Edit your html like this:</h3>
-      <button><html></button>
+      <img src="code.jpg">
