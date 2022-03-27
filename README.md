@@ -7,3 +7,7 @@ You just have to make a body tag and import css and js files and write all the c
 script tag.
 
 Visit <a>http://webmd.rf.gd</a> Official Website for WebMD Framework.
+<section>
+    <h1><strong>Usage:</strong><h1/>
+    <h3>Edit your html like this:</h3>
+      <button><html></button>
