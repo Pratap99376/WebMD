@@ -10,4 +10,7 @@ Visit <a>http://webmd.rf.gd</a> Official Website for WebMD Framework.
 <section>
     <h1><strong>Usage:</strong><h1/>
     <h3>Edit your html like this:</h3>
-      <img src="code.jpg">
+      <img src="code.jpg"><br>
+        <i>Now you have successfully initialized your app.</i>
+        <p>For further instructions read our docs and practice the showcase sample</p>
+        <big style="color:red">The latest version of WebMD is only for mobile phones and Tabs</big>
