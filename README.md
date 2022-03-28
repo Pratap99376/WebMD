@@ -14,3 +14,4 @@ Visit <a>http://webmd.rf.gd</a> Official Website for WebMD Framework.
         <i>Now you have successfully initialized your app.</i>
         <p>For further instructions read our docs and practice the showcase sample</p>
         <big style="color:red">The latest version of WebMD is only for mobile phones and Tabs</big>
+        <p>Refer to our youtube playlist on the tutorials of WebMD Playlist : https://youtube.com/playlist?list=PLN0zOTXvg6M_umzDd9fQFePPH8Xe2sfvD </p>
