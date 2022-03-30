@@ -61,6 +61,7 @@
     	}
     	navbar(backcolor,element){
     		if(!nav_active && !down_active && !delay && !slide_bar){
+    			$(".actcontrol").style.zIndex = "-1";
     			$(".nav_bar").style.backgroundColor = backcolor;
     			$(".nav_bar").innerHTML = "";
     			if(element != undefined){
@@ -91,6 +92,7 @@
     	risebar(backcolor,element){
     		if(!down_active && !nav_active && !delay && !slide_bar){
     			    $(".down_bar").style.backgroundColor = backcolor;
+    			    $(".down_bar").style.display = "block";
 	    			$(".down_bar").innerHTML = "";
 	    			if(element != undefined){
 	    				$(".down_bar").appendChild(element.node);
@@ -116,7 +118,7 @@
     			}
     			var pro = new Progress(wheelcolor);
     			pro.node.style.marginTop = "2vh";
-    			var text = new MDText(message,"none","black",5,"bold");
+    			var text = new MDText(message,"none","black",3,"bold");
     			text.node.style.marginTop = "4vh";
     			$(".app").animate([
     					{ backgroundColor:"transparent" },
@@ -246,7 +248,6 @@
     	btnnav(backcolor,color,btns){
     		if(!btn_nav){
 	    		$(".btnnav").style.backgroundColor = backcolor;
-	    		$(".btnnav").style.height = "10vh";
 	    		let btext = btns.trim().split(",");
 	    		for(let i = 0;i < btext.length;i++){
 	    			let btn = document.createElement("button");
@@ -270,7 +271,6 @@
     	sidenav(backcolor,color,btns){
     		if(!side_nav){
 	    		$(".sidenav").style.backgroundColor = backcolor;
-	    		$(".sidenav").style.width = "20vw";
 	    		let btext = btns.trim().split(",");
 	    		for(let i = 0;i < btext.length;i++){
 	    			let btn = document.createElement("button");
@@ -281,9 +281,16 @@
 	    				btn.style.height = "calc(100vh/" + btext.length + ")";
 	    		    }
 	    		    else{
-	    		    	btn.style.height = "calc(90vh/" + btext.length + ")";
-	    		    	$(".sidenav").style.height = "90vh";
-	    		    	$(".sidenav").style.top = "10vh";
+	    		    	if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+		    		    	btn.style.height = "calc(93vh/" + btext.length + ")";
+		    		    	$(".sidenav").style.height = "93vh";
+		    		    	$(".sidenav").style.top = "7vh";
+	    		    	}
+	    		    	else{
+	    		    		btn.style.height = "calc(90vh/" + btext.length + ")";
+		    		    	$(".sidenav").style.height = "90vh";
+		    		    	$(".sidenav").style.top = "10vh";
+	    		    	}
 	    		    }
 	    			$(".sidenav").appendChild(btn);
 	    			$(".app").style.marginLeft = "-20vw";
@@ -297,6 +304,12 @@
 	    		$(".sidenav").innerHTML = "";
 	    		side_nav = false;
     		}
+    	}
+    	upc(act,func){
+    		$("#actupc").addEventListener(act,func);
+    	}
+    	downc(act,func){
+    		$("#actdownc").addEventListener(act,func);
     	}
     	Dialog(elem,btns,btncolor,color){
     		$(".mddialog").innerHTML = "";
@@ -383,6 +396,7 @@
 					$(".nav_bar").style.transform = "translateX(-85vw)";
 					setTimeout(() => {
 						nav_active = false;
+						$(".actcontrol").style.zIndex = "2";
 					},500);
 				}
 				if(slide_bar){
@@ -419,6 +433,7 @@
 						down_active = false;
 						$(".down_bar").style.backgroundColor = "";
 						$(".down_bar").innerHTML = "";
+						$(".down_bar").style.display = "none";
 					},500);
 				}
 			});
@@ -498,13 +513,10 @@
 		}
 		value(data){
 			
-				this.node.value = data;
-			
+				this.node.value = data;		
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){		
+				this.node.style = this.node.getAttribute("style") + css;		
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
@@ -595,7 +607,7 @@
 	}
 	class BottomActionBar{
 		update(){
-			this.image.style.backgroundImage = "url('account.png')";
+			this.image.style.backgroundImage = "url(" + this.icon + ")";
 			this.node.style.backgroundColor = this.backColor;
 			this.node.style.color = this.txtColor;
 			this.node.appendChild(this.image);
@@ -616,6 +628,9 @@
 		}
 		act(mode,action){			
 				this.node.addEventListener(mode,action);
+		}
+		iconact(mode,action){
+				this.node.childNodes[0].addEventListener(mode,action);
 		}
 		value(data){			
 				this.node.value = data;			
@@ -640,19 +655,22 @@
 	}
 	class ActionBarWithControl{
 		update(){
-			this.image.style.backgroundImage = "url('account.png')";
+			this.image.style.backgroundImage = "url(" + this.icon + ")";
 			this.node.style.backgroundColor = this.backColor;
 			this.node.style.color = this.txtColor;
 			this.node.appendChild(this.image);
 			this.node.innerHTML += this.text;
 			$("#actupc").style.display = "block";
 			$("#actupc").style.backgroundColor = this.controlColor;
+			$(".actcontrol").style.backgroundColor = this.controlColor;
+			$(".actcontrol").style.backgroundImage = "url(" + this.controlIcon + ")";
 		}
-		constructor(txt,color,txtcolor,icon,controlcolor){
+		constructor(txt,color,txtcolor,icon,controlcolor,controlicon){
 			this.text = txt;
 			this.backColor = color;
 			this.txtColor = txtcolor;
 			this.controlColor = controlcolor;
+			this.controlIcon = controlicon;
 			this.icon = icon;
 			this.node = document.createElement("div");
 			this.image = document.createElement("button");
@@ -664,6 +682,9 @@
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
+		}
+		iconact(mode,action){
+				this.node.childNodes[0].addEventListener(mode,action);
 		}
 		value(data){
 				this.node.value = data;
@@ -683,19 +704,21 @@
 	}
 	class BottomActionBarWithControl{
 		update(){
-			this.image.style.backgroundImage = "url('account.png')";
+			this.image.style.backgroundImage = "url(" + this.icon + ")";
 			this.node.style.backgroundColor = this.backColor;
 			this.node.style.color = this.txtColor;
 			this.node.appendChild(this.image);
 			this.node.innerHTML += this.text;
 			$("#actdownc").style.display = "block";
 			$("#actdownc").style.backgroundColor = this.controlColor;
+			$("#actdownc").style.backgroundImage = "url(" + this.controlIcon + ")";		
 		}
-		constructor(txt,color,txtcolor,icon,controlcolor){
+		constructor(txt,color,txtcolor,icon,controlcolor,controlicon){
 			this.text = txt;
 			this.backColor = color;
 			this.txtColor = txtcolor;
 			this.controlColor = controlcolor;
+			this.controlIcon = controlicon;
 			this.icon = icon;
 			this.node = document.createElement("div");
 			this.image = document.createElement("button");
@@ -719,6 +742,9 @@
 		}
 		inner(value){
 				this.node.innerHTML = value;
+		}
+		iconact(mode,action){
+				this.node.childNodes[0].addEventListener(mode,action);
 		}
 		del(){
 			this.node.remove();
@@ -771,14 +797,24 @@
 				this.control.style.animation = null;
 				if(!this.active){
 					this.control.style.animation = "switch_mode 0.5s ease-in-out";
-					this.control.style.marginLeft = "10vw";
+					if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+						this.control.style.marginLeft = "5vw";
+					}
+					else{
+						this.control.style.marginLeft = "10vw";
+					}
 					setTimeout(() => {
 						this.active = true;
 					},500);
 				}
 				else{
 					this.control.style.animation = "switch_mode 0.5s ease-in-out reverse";
-					this.control.style.marginLeft = "2vw";
+					if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+						this.control.style.marginLeft = "1vw";
+					}
+					else{
+						this.control.style.marginLeft = "2vw";
+					}
 					setTimeout(() => {
 						this.active = false;
 					},500);
@@ -866,21 +902,16 @@
 		}
 		value(data){
 			
-				this.node.value = data;
-			
+				this.node.value = data;		
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){		
+				this.node.style = this.node.getAttribute("style") + css;		
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){		
+				this.node.innerHTML = value;		
 		}
 		del(){
 			this.node.remove();
@@ -961,15 +992,13 @@
 					},480);
 				}
 			});
-
 		}
-		constructor(width,height,txt,backcolor,txtcolor,txtsize,anim){
+		constructor(width,height,txt,backcolor,txtcolor,anim){
 			this.width = pw(width);
 			this.height = ph(height);
 			this.text = txt;
 			this.backColor = backcolor;
 			this.textColor = txtcolor;
-			this.txtsize = txtsize;
 			this.anim = anim;
 			this.node = document.createElement("textarea");
 			this.node.setAttribute("class","textarea");
@@ -978,27 +1007,19 @@
 			this.update();
 		}
 		act(mode,action){
-			
-				this.node.addEventListener(mode,action);
-
+			this.node.addEventListener(mode,action);
 		}
 		value(data){
-			
-				this.node.value = data;
-			
+			this.node.value = data;
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){	
+				this.node.style = this.node.getAttribute("style") + css;	
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
+		inner(value){	
 				this.node.innerHTML = value;
-			
 		}
 		del(){
 			this.node.remove();
@@ -1027,28 +1048,20 @@
 			nodes++;
 			this.update();
 		}
-		act(mode,action){
-			
-				this.node.addEventListener(mode,action);
-			
+		act(mode,action){	
+				this.node.addEventListener(mode,action);	
 		}
 		value(data){
-			
-				this.node.value = data;
-			
+				this.node.value = data;	
 		}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
-			
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
 				this.node.innerHTML = value;
-			
 		}
 		del(){
 			this.node.remove();
@@ -1071,26 +1084,19 @@
 			this.update();
 		}
 		act(mode,action){
-			
 				this.node.addEventListener(mode,action);
-			
 		}
 		value(data){
-			
 				this.node.value = data;
-			
 		}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
 			}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
 				this.node.innerHTML = value;
-			
 		}
 		del(){
 			this.node.remove();
@@ -1116,27 +1122,19 @@
 			this.update();
 		}
 		act(mode,action){
-			
 				this.node.addEventListener(mode,action);
-			
 		}
 		value(data){
-			
 				this.node.value = data;
-			
 		}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
-			
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
 				this.node.innerHTML = value;
-			
 		}
 		del(){
 			this.node.remove();
@@ -1199,30 +1197,22 @@
 			this.update();
 		}
 		act(mode,action){
-			
 				this.node.addEventListener(mode,action);
-			
 		}
 		custom(element){
 			this.node.appendChild(element);
 		}
 		value(data){
-			
 				this.node.value = data;
-			
 		}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
-			
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
-				this.node.innerHTML = value;
-			
+			this.node.innerHTML = value;	
 		}
 		add(element){
 			if(element.container){
@@ -1282,10 +1272,8 @@
 		custom(element){
 			this.node.appendChild(element);
 		}
-		add(row,column,element){
-			
-				this.node.childNodes[row - 1].childNodes[column - 1].appendChild(element.node);
-			
+		add(row,column,element){	
+				this.node.childNodes[row - 1].childNodes[column - 1].appendChild(element.node);	
 		}
 		del(){
 			this.node.remove();
@@ -1312,28 +1300,20 @@
 			nodes++;
 			this.update();
 		}
-		act(mode,action){
-			
+		act(mode,action){	
 				this.node.addEventListener(mode,action);
-			
 		}
 		value(data){
-			
 				this.node.value = data;
-			
 		}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
-			
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){		
+				this.node.innerHTML = value;		
 		}
 		del(){
 			this.node.remove();
@@ -1367,20 +1347,16 @@
 			nodes++;
 			this.update();
 		}
-		act(mode,action){
-			
-				this.node.addEventListener(mode,action);
-			
+		act(mode,action){		
+				this.node.addEventListener(mode,action);		
 		}
 		add(item){
 			this.items.push(item);
 			let div = document.createElement("div");
 			div.innerHTML = item;
 			div.style.backgroundColor = this.backColor;
-			div.style.color = this.txtColor;
-			
-				this.node.appendChild(div);
-			
+			div.style.color = this.txtColor;		
+				this.node.appendChild(div);		
 		}
 		remove(item){
 			for(let i = 0;i < this.items.length;i++){
@@ -1396,14 +1372,12 @@
 					let div = document.createElement("div");
 					div.innerHTML = this.items[i];
 					div.style.backgroundColor = this.backColor;
-					div.style.color = this.txtColor;
-					
+					div.style.color = this.txtColor;				
 						this.node.appendChild(div);
 				}
 			}
 		}
 		css(css){
-			
 				for(let i = 0;i < this.node.childElementCount;i++){
 					this.node.childNodes[i].style = this.node.getAttribute("style") + css;
 				}	
@@ -1412,14 +1386,10 @@
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
-				this.node.innerHTML = value;
-			
+			this.node.innerHTML = value;
 		}
 		maincss(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+			this.node.style = this.node.getAttribute("style") + css;
 		}
 		del(){
 			this.node.remove();
@@ -1460,14 +1430,23 @@
                   this.update();
               }
         add(item){
-			this.list.push(item);
-			let div = document.createElement("div");
-			div.innerHTML = item;
-			div.style.backgroundColor = this.backColor;
-			div.style.color = this.txtColor;
-			
-				this.node.appendChild(div);
-			
+		  this.child = document.createElement("div");
+          this.child.addEventListener("click",() => {
+          	this.touch = this.list[i];
+          });
+          this.child.setAttribute("class","mdlisticon");
+          this.child.style.width = this.width + "vw";
+          this.child.style.height = this.height + "vh";
+          this.child.style.backgroundColor = this.backColor;
+          this.child.style.color = this.txtColor;
+          this.img = document.createElement("img");
+          this.img.src = this.icon;
+          this.img.setAttribute("class","listicon");
+          this.img.style.height = this.height - this.height/4 + "vh";
+          this.img.style.width = this.height - this.height/4 + "vh";
+          this.child.appendChild(this.img);
+          this.child.innerHTML += item;
+          this.node.appendChild(this.child);
 		}
 		remove(item){
 			for(let i = 0;i < this.list.length;i++){
@@ -1480,44 +1459,45 @@
 			this.node.innerHTML = "";
 			for(let i = 0;i < this.list.length;i++){
 				if(this.list[i] != ""){
-					let div = document.createElement("div");
-					div.innerHTML = this.list[i];
-					div.style.backgroundColor = this.backColor;
-					div.style.color = this.txtColor;
-					if(this.node){
-						this.node.appendChild(div);
-					}
-					else{
-						this.node.appendChild(div);
-					}
+					this.child = document.createElement("div");
+                      this.child.addEventListener("click",() => {
+                      	this.touch = this.list[i];
+                      });
+                      this.child.setAttribute("class","mdlisticon");
+                      this.child.style.width = this.width + "vw";
+                      this.child.style.height = this.height + "vh";
+                      this.child.style.backgroundColor = this.backColor;
+                      this.child.style.color = this.txtColor;
+                      this.img = document.createElement("img");
+                      this.img.src = this.icon;
+                      this.img.setAttribute("class","listicon");
+                      this.img.style.height = this.height - this.height/4 + "vh";
+                      this.img.style.width = this.height - this.height/4 + "vh";
+                      this.child.appendChild(this.img);
+                      this.child.innerHTML += this.list[i];
+                      this.node.appendChild(this.child);
 				}
 			}
 		}
-		value(data){
-			
-				this.node.value = data;
-			
+		value(data){		
+			this.node.value = data;		
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){		
+			this.node.style = this.node.getAttribute("style") + css;		
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){	
+			this.node.innerHTML = value;	
 		}
 		del(){
 			this.node.remove();
 		}
-        }
+    }
 	class MDChips{
         update(){
           this.node.style.width = this.width + "vw";
@@ -1547,26 +1527,20 @@
 		  nodes++;
           this.update();
         }
-        value(data){
-			
-				this.node.value = data;
-			
+        value(data){		
+			this.node.value = data;
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){		
+				this.node.style = this.node.getAttribute("style") + css;		
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){		
+				this.node.innerHTML = value;		
 		}
 		del(){
 			this.node.remove();
@@ -1582,7 +1556,7 @@
               this.node.style.borderBottomColor = this.color;
               this.helper.addEventListener("click",() => {
                 if(!this.active && !this.error){
-                  this.helper.style.transform = "translateY(2vh)";
+                  this.helper.style.transform = "translateY(3vh)";
                   this.helper.style.opacity = "1";
                   this.active = true;
                 }
@@ -1643,6 +1617,9 @@
                 }
               });
            }
+            maincss(css){
+			this.container.style = this.container.getAttribute("style") + css;
+		   }
            constructor(width,helper,color,type,rect){
                this.width = width;
                this.color = color;
@@ -1661,26 +1638,20 @@
 			   nodes++;
                this.update();
            }
-           value(data){
-			
-				this.node.value = data;
-			
+           value(data){		
+				this.node.value = data;	
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){		
+				this.node.style = this.node.getAttribute("style") + css;	
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){	
+				this.node.innerHTML = value;	
 		}
 		del(){
 			this.node.remove();
@@ -1692,6 +1663,9 @@
               this.container.style.borderRadius = "2vw";
               this.node.style.width = this.width + "vw";
               this.helper.style.width = this.width + "vw";
+              if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+              		this.helper.style.transform = "translateY(5.5vh)";
+          	  }
               this.helper.style.color = this.color;
               this.node.style.color = this.color;
               this.node.style.paddingRight = "5.5vh";
@@ -1708,7 +1682,7 @@
                     this.helper.style.transform = "translateY(1vh)";
                   }
                   else{
-                    this.helper.style.transform = "translateY(2vh)";
+                    this.helper.style.transform = "translateY(3vh)";
                   }
                   this.helper.style.opacity = "1";
                   this.active = true;
@@ -1785,7 +1759,12 @@
                   else{
                     this.helper.style.opacity = "1";
                   }
-                  this.helper.style.transform = "translateY(6.5vh)";
+                  if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+              		this.helper.style.transform = "translateY(5.5vh)";
+          	      }
+          	      else{
+          	      	this.helper.style.transform = "translateY(6.5vh)";
+          	      }
                   this.active = false;
                 }
               });
@@ -1814,15 +1793,14 @@
 			   nodes++;
                this.update();
            }
-           value(data){
-			
-				this.node.value = data;
-			
+           maincss(css){
+			this.node.style = this.container.getAttribute("style") + css;
+		   }
+       value(data){		
+				this.node.value = data;		
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){	
+				this.node.style = this.node.getAttribute("style") + css;	
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
@@ -1830,10 +1808,8 @@
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){	
+				this.node.innerHTML = value;	
 		}
 		del(){
 			this.node.remove();
@@ -1908,26 +1884,20 @@
 			this.node.style.margin = "2vh";
 			this.update();
 		}
-		value(data){
-			
+		value(data){	
 				this.node.value = data;
-			
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){	
+				this.node.style = this.node.getAttribute("style") + css;	
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
-		inner(value){
-			
-				this.node.innerHTML = value;
-			
+		inner(value){	
+				this.node.innerHTML = value;	
 		}
 		del(){
 			this.node.remove();
@@ -1940,6 +1910,7 @@
 			this.wheel.style.height = this.height + "vh";
 			this.node.style.backgroundColor = this.barColor;
 			this.wheel.style.backgroundColor = this.wheelColor;
+			this.wheel.style.marginTop = "0";
 			this.node.addEventListener("mousemove",(event) => {
 				let margin = event.clientX - this.node.offsetLeft;
 				this.wheel.style.width = margin;
@@ -1961,15 +1932,11 @@
 			nodes++;
 			this.update();
 		}
-		value(data){
-			
-				this.node.value = data;
-			
+		value(data){		
+				this.node.value = data;	
 		}
-		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+		css(css){	
+				this.node.style = this.node.getAttribute("style") + css;	
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
@@ -1977,10 +1944,8 @@
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		inner(value){
-			
+		inner(value){	
 				this.node.innerHTML = value;
-			
 		}
 		del(){
 			this.node.remove();
@@ -1990,11 +1955,7 @@ class MDRangeNormal{
     update(){
       this.node.style.width = this.width + "vw";
       this.node.style.backgroundColor = this.barColor;
-      this.node.style.height = "1vw";
-      this.wheel.style.width = "5vw";
-      this.wheel.style.height = "5vw";
       this.wheel.style.borderRadius = "100%";
-      this.wheel.style.marginTop = "-2vw";
       this.wheel.style.backgroundColor = this.wheelColor;
       this.node.addEventListener("mousemove",(event) => {
         let margin = event.clientX - this.node.offsetLeft;
@@ -2014,15 +1975,11 @@ class MDRangeNormal{
       this.node.appendChild(this.wheel);
       this.update();
     }
-    value(data){
-			
-				this.node.value = data;
-			
-		}
+    value(data){	
+		this.node.value = data;	
+	}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
-			
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
@@ -2031,9 +1988,7 @@ class MDRangeNormal{
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
-				this.node.innerHTML = value;
-			
+			this.node.innerHTML = value;	
 		}
 		del(){
 			this.node.remove();
@@ -2045,30 +2000,61 @@ class MDRangeNormal{
                 this.btn.style.backgroundColor = this.buttonColor;
                 this.btn.addEventListener("click",() => {
                   if(!this.active){
-                    this.node.animate([{
-                        paddingLeft:"0vw",
-                        easing:"ease-in-out"
-                    },
-                    {
-                        paddingLeft:"calc(" + (pw(12) - ph(4)) + "px)",
-                        easing:"ease-in-out"
-                    }
-                    ],500);
+                  	if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+	                    this.node.animate([{
+	                        paddingLeft:"0vw",
+	                        easing:"ease-in-out"
+	                    },
+	                    {
+	                        paddingLeft:"calc(" + (pw(10) - ph(4)) + "px)",
+	                        easing:"ease-in-out"
+	                    }
+	                    ],500);
+                	}
+                	else{
+                		this.node.animate([{
+	                        paddingLeft:"0vw",
+	                        easing:"ease-in-out"
+	                    },
+	                    {
+	                        paddingLeft:"calc(" + (pw(12) - ph(4)) + "px)",
+	                        easing:"ease-in-out"
+	                    }
+	                    ],500);
+                	}
                     setTimeout(() => {
                       this.active = true;
-                      this.node.style.paddingLeft = (pw(12) - ph(4)) + "px";
+                      if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+                      	  this.node.style.paddingLeft = (pw(10) - ph(4)) + "px";
+                  	  }
+                  	  else{
+                  	  	  this.node.style.paddingLeft = (pw(12) - ph(4)) + "px";
+                  	  }
                     },495);
                   }
                   else{
-                    this.node.animate([{
-                        paddingLeft:"calc(" + (pw(12) - ph(4)) + "px)",
-                        easing:"ease-in-out"
-                    },
-                    {
-                        paddingLeft:"0",
-                        easing:"ease-in-out"
-                    }
-                    ],500);
+                  	if(innerWidth > 550 && innerWidth < 850 && innerHeight > 850 && innerHeight < 1200){
+	                    this.node.animate([{
+	                        paddingLeft:"calc(" + (pw(10) - ph(4)) + "px)",
+	                        easing:"ease-in-out"
+	                    },
+	                    {
+	                        paddingLeft:"0",
+	                        easing:"ease-in-out"
+	                    }
+	                    ],500);
+                	}
+                	else{
+                		this.node.animate([{
+	                        paddingLeft:"calc(" + (pw(12) - ph(4)) + "px)",
+	                        easing:"ease-in-out"
+	                    },
+	                    {
+	                        paddingLeft:"0",
+	                        easing:"ease-in-out"
+	                    }
+	                    ],500);
+                	}
                     setTimeout(() => {
                       this.active = false;
                       this.node.style.paddingLeft = "0";
@@ -2087,14 +2073,10 @@ class MDRangeNormal{
                 this.update();
            }
            value(data){
-			
 				this.node.value = data;
-			
-		}
+    	   }
 		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+				this.node.style = this.node.getAttribute("style") + css;	
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
@@ -2102,8 +2084,7 @@ class MDRangeNormal{
 		act(mode,action){
 				this.node.addEventListener(mode,action);
 		}
-		inner(value){
-			
+		inner(value){	
 				this.node.innerHTML = value;
 		}
 		del(){
@@ -2113,11 +2094,12 @@ class MDRangeNormal{
        class MDTab{
 		   update(){
 			  this.node.style.backgroundColor = this.backColor;
+			  this.node.style.width = this.width + "vw";
 			  for(let i = 0;i < this.fs.length; i++){
 			     let btn = document.createElement("button");
 				 btn.style.color = this.txtColor;
 				 btn.setAttribute("class","tabbtn");
-				 btn.style.width = "calc(50vw/" + this.fs.length + ")";
+				 btn.style.width = "calc(" + this.width + "vw/" + this.fs.length + ")";
 				 btn.innerHTML = this.fs[i];
 				 btn.addEventListener("click",() => {
 				 	this.touch = this.fs[i];
@@ -2130,7 +2112,8 @@ class MDRangeNormal{
 				 this.node.appendChild(btn);
 			  }
 		   }
-		   constructor(backcolor,txtcolor,list){
+		   constructor(width,backcolor,txtcolor,list){
+		   	  this.width = width;
 		      this.backColor = backcolor;
 			  this.txtColor = txtcolor;
 			  this.fs = list.trim().split(",");
@@ -2139,23 +2122,17 @@ class MDRangeNormal{
 			  this.node.setAttribute("class","tab");
 			  this.update();
 		   }
-		   value(data){
-			
-				this.node.value = data;
-			
+		value(data){
+			this.node.value = data;
 		}
 		css(css){
-			
 				this.node.style = this.node.getAttribute("style") + css;
-			
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
 				this.node.innerHTML = value;
-			
 		}
 		act(mode,action){
 				this.node.addEventListener(mode,action);
@@ -2182,15 +2159,11 @@ class MDRangeNormal{
 				this.node = document.createElement("div");
 				this.update();
 			}
-			value(data){
-			
-				this.node.value = data;
-			
+		value(data){
+			this.node.value = data;
 		}
 		css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+			this.node.style = this.node.getAttribute("style") + css;
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
@@ -2199,9 +2172,7 @@ class MDRangeNormal{
 				this.node.addEventListener(mode,action);
 		}
 		inner(value){
-			
-				this.node.innerHTML = value;
-
+			this.node.innerHTML = value;
 		}
 		del(){
 			this.node.remove();
@@ -2252,18 +2223,14 @@ class MDRangeNormal{
                      this.open = false;
                  }
             }
-            css(css){
-			
-				this.node.style = this.node.getAttribute("style") + css;
-			
+        css(css){
+        	this.node.style = this.node.getAttribute("style") + css;
 		}
 		attr(attribute,value){
 				this.node.setAttribute(attribute,value);
 		}
 		inner(value){
-			
 				this.node.innerHTML = value;
-
 		}
 		del(){
 			this.node.remove();

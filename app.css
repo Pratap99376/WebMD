@@ -145,7 +145,7 @@
    .down_bar{
     width:100vw;
     height:50vh;
-    background:dodgerblue;
+    display: none;
     position: fixed;
     box-shadow:0 0 3vw lightgrey;
     overflow:scroll;
@@ -191,7 +191,6 @@
     display: none;
     box-shadow:0 0 2vw grey;
     background-size: 70% 70%;
-    background-image: url("phone.png");
     background-position:center;
     background-repeat: no-repeat;
     transition:1s;
@@ -337,10 +336,12 @@
    .sidenv{
     font-size:3vh;
     border:0;
-    width:20vw;
+    width:15vw;
     background-color:transparent;
     transition:0.5s;
     opacity:0.6;
+    padding: 0;
+    text-align: center;
    }
    .sidenv:hover{
     opacity:1;
@@ -353,7 +354,7 @@
     background-color:white;
     box-shadow:0 0 1vw grey;
     border-radius: 1vw;
-    padding:5vh 2vh 5vh 2vh;
+    padding:2vh;
     position: fixed;
     top:20vh;
     left:15vw;
@@ -371,7 +372,7 @@
    }
    .mddialogtext button{
     margin-left:2vw;
-    border-radius: 0.1vw;
+    border-radius: 0.5vw;
     border:0;
     padding:1vh;
     transition:0.5s;
@@ -403,12 +404,14 @@
         box-sizing:border-box;
         padding:0;
         margin:0;
+        height:1vw;
       }
       .range button{
         border:0;
         border-radius:1vw;
-        width:3vw;
-        height:3vw;
+        width:5vw;
+        height:5vw;
+        margin-top:-2vw;
       }
       .mchip button{
         border:0;
@@ -491,41 +494,179 @@
               .mmenu{
                 display:none;
               }
-@media screen and (max-width:800px) and (max-height:1200px) and (min-width:450px) and (min-height:600px){
-  .action_bar{
+/*Tablets,iPads*/
+@media screen and (max-width:800px) and (min-width:600px) and (max-height: 1200px) and (min-height:700px){
+    .action_bar,.bottom_action_bar{
+      height:7vh;
+      font-size: 3vw;
+      padding-left:0;
+      box-shadow: 0 0 1vw grey;
+    }
+    .action_bar button,.bottom_action_bar button{
+      margin-right: 0;
+    }
+    .button{
+      font-size:3vw;
+    }
+    .buttonraised{
+      font-size:3vw;
+    }
+    .mdinputtext > div > input{
+      height:6vh;
+      font-size: 3.5vw;
+    }
+    .mdinputtext > input{
+      font-size:3.5vw;
+    }
+    .mdinputtext p{
+        font-size: 3vw;
+      }
+    .mdinputtext > div > img{
+      width:5vh;
+      height:5vh;
+      margin-top: 1.5vh;
+    }
+    .fab{
+      width:10vw;
+      height:10vw;
+      font-size:4.5vw;
+      left:87vw;
+    }
+    .textarea{
+      font-size:3vw;
+      box-shadow: 0 0 1vw grey;
+    }
+    .switch_container{
+      width:10vw;
+      height:6vw;
+      padding-top:0.75vw; 
+      border-radius:1vw;
+    }
+    .switch_container button{
+      width:4.5vw;
+      height:4.5vw;
+      margin-left:1vw;
+    }
+    @keyframes switch_mode{
+      from{margin-left:1vw;}
+      to{margin-left: 5vw}
+    }
+    .switchn{
+      width:10vw;
+      height: 2vh;
+    }
+    .switchn button{
+      width:4vh;
+      height:4vh;
+    }
+    .progressbar{
+      height:5vh;
+    }
+    .progressbar > div{
+      height:3.75vh;
+    }
+    .list > div{
+      font-size: 3vw;
+    }
+    .mchip button{
+      font-size:2vw;
+    }
+    .toast{
+      font-size:2.5vw;
+      border-radius: 2vw;
+      width:50vw;
+    }
+    .snack{
+      font-size: 2.5vw;
+      height:8vh;
+      top:92vh;
+      padding-top:calc((8vh - 2.5vw)/2);
+      padding-bottom:calc((8vh - 2.5vw)/4);
+    }
+    .mddialog{
+      width:40vw;
+      left:27.5vw;
+      padding:2vh;
+    }
+    .mddialogtext button{
+      font-size:2vw;
+    }
+    @keyframes snack{
+      from{transform:translateY(8vh);opacity: 0}
+      to{transform:translateY(0vh);opacity:1;}
+    }
+    .slidefirst{
+    width:200vw;
+    height:200vh;
+    background-color:rgba(30,144,255,0.2);
+    position: fixed;
+    transform:rotate(30deg);
+    top:10vh;
+    left:140vw;
+   }
+   .slidesecond{
+      width:200vw;
+      height:200vh;
+      background-color:rgba(255,255,0,0.2);
+      position: fixed;
+      top:10vh;
+      transform:rotate(-30deg);
+      right:140vw;
+   }
+   .delay{
+     width:40vw;
+     height:20vh;
+     border-radius: 2vw;
+     left:30vw;
+   }
+   .progress{
+    width:3vw;
+    height:3vw;
+    border-width: 0.5vw;
+   }
+   .tab button{
+    font-size:3vw;
+   }
+   .sidenv{
+    width:10vw;
+    font-size: 3vw;
+   }
+   .sidenv:hover{
+    opacity:1;
+    box-shadow:0 0 0.3vw grey;
+    background-color: lavender;
     font-size:3.5vw;
-    padding-left:0;
-    box-shadow: 0 0 1vw grey;
-  }
-  .action_bar button{
-    margin:0;
-  }
-  .fab{
+   }
+   .btnnv{
+    height:6vh;
+    font-size: 3vw;
+   }
+   .btnnv:hover{
+    opacity:1;
+    box-shadow:0 0 0.3vw grey;
+    background-color: lavender;
+    font-size:3.5vw;
+   }
+   .delay{
+    width:40vw;
+    height:20vw;
+    padding:1vw;
+   }
+   .range{
+    height: 0.5vw;
+   }
+   .range > button{
+    width:3.5vw;
+    height:3.5vw;
+    margin-top:-1.75vw;
+   }
+   #actupc{
     width:10vw;
     height:10vw;
-    font-size:4vw;
-    left:87vw;
-    top:80vh;
-  }
-  .switch_container{
-    width:15vw;
-    height:6vh;
-  }
-  .switch_button{
-    width:5vh;
-    height:5vh;
-  }
-}
-@media screen and (min-width:800px) and (min-height:600px){
-  .action_bar{
-    font-size:2vw;
-    padding-left:0;
-    box-shadow: 0 0 1vw grey;
-  }
-  .action_bar button{
-    margin:0;
-  }
-  .nav_bar{
-    width:40vw;
-  }
+    top:4vh;
+   }
+   #actdownc{
+    width:10vw;
+    height: 10vw;
+   }
 }
